@@ -1,0 +1,35 @@
+{
+ "note": "Known release limitations. The release gate passes only when every UNIMPLEMENTED rule listed here has approved=true, set by the release owner (not by the build). An approved rule is still never executed: it is shown as 'APPROVED LIMITATION / NOT EXECUTED' and is never reported as an MCA validation PASS. Entries with approved=false are requests only; they have no effect on the build or the gate.",
+ "limitations": [
+  {
+   "id": "ML-43-b",
+   "kind": "rule",
+   "description": "Business Rules Ind AS V1.2, sheet 'Mandatory Line Items' row 46 (table DisclosureOfTransactionsBetweenRelatedPartiesTable, [610800] Notes - Related party), clause 'In OutstandingBalancesForRelatedPartyTransactionsAbstract- Element for amount shall be mandatory for various transactions' does not identify which amount elements are required for which transactions. The rest of the row (NameOfRelatedParty, nature of relationship, country, nature of transactions, at least one transaction element, bad and doubtful debts expense) is executed as ML-43. Needs MCA clarification.",
+   "approved": true,
+   "approvedBy": "Varun Gupta (release owner), 2026-10-03"
+  },
+  {
+   "id": "GOLDEN-INSTANCES-MISSING",
+   "kind": "evidence",
+   "description": "Satisfied since 2026-10-03 by golden-icom-analytics-2022-23.xml (MCA-validated, FY 2022-23). Kept so the gate can be released without golden files if they are ever removed (e.g. before making the repository public): approve this entry in that case.",
+   "approved": false,
+   "approvedBy": null
+  },
+  {
+   "id": "SR-L1097-1",
+   "kind": "rule",
+   "description": "Specific rule SR-L1097-1 ('This is a mandatory field'): WhetherPropertyPlantAndEquipmentAreStatedAtRevaluedAmount, ELR 400600 (PPE note). Requested as an approved limitation for the GE Power Boilers 2024-25 accepted filing, which reports PPE as nil and has no PPE note. NOT EFFECTIVE: the compiler accepts approvals only for UNIMPLEMENTED rules and the rule is still executed. Requires an engine/compile change and a release-owner decision.",
+   "approved": false,
+   "approvedBy": null,
+   "requestedOn": "2026-10-05"
+  },
+  {
+   "id": "SR-L1304-1",
+   "kind": "rule",
+   "description": "Specific rule SR-L1304-1 ('This field is mandatory'): WhetherOtherIntangibleAssetsAreStatedAtRevaluedAmount, ELR 400900 (intangibles note). Requested as an approved limitation for the GE Power Boilers 2024-25 accepted filing, which reports intangibles as nil and has no intangibles note. NOT EFFECTIVE for the same reason as SR-L1097-1.",
+   "approved": false,
+   "approvedBy": null,
+   "requestedOn": "2026-10-05"
+  }
+ ]
+}

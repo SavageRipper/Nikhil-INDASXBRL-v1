@@ -1,0 +1,17 @@
+{
+  "note": "Calibration of the rule engine against MCA-validated instance documents (golden-*.xml). Each entry names a Business Rules V1.2 requirement that an MCA-validated instance does not meet; the requirement stays visible but is reported as a WARNING instead of a blocking error. Only explicit workbook requirements contradicted by validated evidence are listed here; interpretation fixes are made in the engine and documented in AUDIT_REPORT.md.",
+  "entries": [
+    {
+      "rule": "ML-44",
+      "concept": "DateOfBirthOfKeyManagerialPersonnelOrDirector",
+      "severity": "WARNING",
+      "evidence": "golden-icom-analytics-2022-23.xml (MCA-validated, FY 2022-23): KMP rows A, B, C report every other ML-44 element but no date of birth"
+    },
+    {
+      "rule": "ML-45",
+      "concept": "TurnoverOfHighestContributingProductOrService",
+      "severity": "WARNING",
+      "evidence": "golden-icom-analytics-2022-23.xml (MCA-validated, FY 2022-23): principal product rows A, B report every other ML-45 element but not the turnover of the highest contributing product"
+    }
+  ]
+}

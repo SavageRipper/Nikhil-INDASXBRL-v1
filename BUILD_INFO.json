@@ -1,0 +1,9 @@
+{
+  "file": "indas-xbrl.html",
+  "sha256": "dacee1cd8119ab47645ae176b8a9eea124815cb24cc690796221c7b963b2160a",
+  "bytes": 10563741,
+  "authorityHash": "e279ba8c90a6ca1091b31822cda1015ac3c88c7236f2710b4d42f662ae046d1f",
+  "buildId": "8fd6549434",
+  "builtWith": "mini-build (ES-module bundler; esbuild not available in this environment)",
+  "node": "v22.22.2"
+}
