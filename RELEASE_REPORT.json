@@ -1,0 +1,201 @@
+{
+  "generatedAt": "2026-10-03T09:00:14.075Z",
+  "authorityHash": "e2d9ad74d208d738091f2bf91894f05f94fae6601a7bafb1b69aa1abdd01b555",
+  "ruleCoverage": {
+    "EXECUTABLE": 1462,
+    "REVIEW_ONLY_EXTERNAL_DATA": 60,
+    "NOT_APPLICABLE": 18,
+    "UNIMPLEMENTED": 1
+  },
+  "officialMcaValidation": "NOT_RUN — the MCA XBRL Validation Tool (Ind AS) has not been executed against generated instances by this build",
+  "arelleXsdNote": "Arelle XML Schema / XBRL 2.1 / Dimensions / Formula validation is not equivalent to the MCA XBRL Validation Tool and does not run the MCA business rules",
+  "ruleAudit": {
+    "VERIFIED": 1114,
+    "COVERED_BY_TEST": 34,
+    "REVIEW_ONLY_EXTERNAL_DATA": 60,
+    "NOT_APPLICABLE": 18,
+    "DATA": 313,
+    "NOT_WITNESSED": 1,
+    "UNIMPLEMENTED": 1
+  },
+  "githubPages": "NOT_RUN — the deployed GitHub Pages site is not reachable from the build environment",
+  "externalDataRules": [
+    "SR-L43-3",
+    "SR-L43-4",
+    "SR-L43-5",
+    "SR-L43-6",
+    "SR-L658-1",
+    "SR-L1860-1",
+    "SR-L3004-1",
+    "SR-L4619-1",
+    "SR-L4632-1",
+    "SR-L4645-1",
+    "SR-L4680-1",
+    "SR-L4689-1",
+    "SR-L4689-2",
+    "SR-L4727-1",
+    "SR-L4738-1",
+    "SR-L4772-1",
+    "SR-L4778-1",
+    "SR-L4824-1",
+    "SR-L4835-1",
+    "SR-L4847-1",
+    "SR-L4862-1",
+    "SR-L4920-1",
+    "SR-L4931-1",
+    "SR-L4961-1",
+    "SR-L5007-2",
+    "SR-L5026-1",
+    "SR-L6276-2",
+    "SR-L6276-3",
+    "SR-L6276-4",
+    "SR-L6279-1",
+    "SR-L6280-1",
+    "SR-L6281-2",
+    "SR-L6283-1",
+    "SR-L6368-2",
+    "SR-L6369-3",
+    "SR-L6388-3",
+    "SR-L6389-4",
+    "SR-L6423-1",
+    "SR-L6426-1",
+    "SR-L6480-1",
+    "SR-L6482-1",
+    "SR-L6485-1",
+    "SR-L6485-2",
+    "SR-L6495-3",
+    "SR-L6498-1",
+    "SR-L6503-1",
+    "SR-L6505-1",
+    "SR-L6511-3",
+    "SR-L6516-1",
+    "SR-L6602-1",
+    "SR-L6755-1",
+    "SR-L6810-1",
+    "SR-L6812-1",
+    "SR-L6984-3",
+    "SR-L6987-1",
+    "SR-L6992-1",
+    "SR-L7009-1",
+    "SR-L7011-1",
+    "SR-L7012-1",
+    "GR-9"
+  ],
+  "unimplementedRules": [
+    "ML-43-b"
+  ],
+  "approvedLimitations": [
+    "ML-43-b: APPROVED LIMITATION / NOT EXECUTED"
+  ],
+  "ruleCorpus": {
+    "sourceFile": "Business_Rules_IndAS_Taxonomy_V1.2.xlsx",
+    "sourceSha256": "8bd65e3be2aa51c17e40be1cfdca2a6d0ef3c221b8f373902da38d3f218f0ce1",
+    "sourceForm": "workbook",
+    "specificRulesSheetTruncated": false,
+    "sheets": [
+      {
+        "name": "Applicable ELR",
+        "rows": 61,
+        "truncated": false
+      },
+      {
+        "name": "Specific rules for elements",
+        "rows": 6912,
+        "truncated": false
+      },
+      {
+        "name": "Generic rules",
+        "rows": 17,
+        "truncated": false
+      },
+      {
+        "name": "Mandatory Line Items",
+        "rows": 110,
+        "truncated": false
+      },
+      {
+        "name": "Exempt parent member Dimension",
+        "rows": 124,
+        "truncated": false
+      },
+      {
+        "name": "Exempt Child Member Dimension",
+        "rows": 171,
+        "truncated": false
+      },
+      {
+        "name": "formulas Linkbase",
+        "rows": 110,
+        "truncated": false
+      },
+      {
+        "name": "Country Codes",
+        "rows": 124,
+        "truncated": false
+      },
+      {
+        "name": "Currency Code",
+        "rows": 87,
+        "truncated": false
+      },
+      {
+        "name": "Parent Child Exempt Calculation",
+        "rows": 23,
+        "truncated": false
+      }
+    ],
+    "specificRuleRows": 812,
+    "genericRuleCount": 16,
+    "mandatoryLineItemRows": 108,
+    "firstElr": "[110000] Balance sheet",
+    "lastElr": "[700700] Disclosures - Secretarial audit report"
+  },
+  "checks": [
+    {
+      "check": "taxonomy table count == application table model count",
+      "ok": true,
+      "detail": "175 all-arcs in definition linkbases / 175 tables in model"
+    },
+    {
+      "check": "automated test suite",
+      "ok": true,
+      "detail": "# tests 146; # pass 144; # fail 0; # skipped 2"
+    },
+    {
+      "check": "business-rule corpus complete: specificRulesSheetTruncated = false (or approved)",
+      "ok": true,
+      "detail": "complete (Business_Rules_IndAS_Taxonomy_V1.2.xlsx, workbook)"
+    },
+    {
+      "check": "UNIMPLEMENTED business rules = 0 (or approved)",
+      "ok": true,
+      "detail": "ML-43-b — 1 approved"
+    },
+    {
+      "check": "rule-by-rule audit: every executable rule VERIFIED (PASS + FAIL witness) or covered by a named hand test",
+      "ok": true,
+      "detail": "{\"VERIFIED\":1114,\"COVERED_BY_TEST\":34,\"REVIEW_ONLY_EXTERNAL_DATA\":60,\"NOT_APPLICABLE\":18,\"DATA\":313,\"NOT_WITNESSED\":1,\"UNIMPLEMENTED\":1} (authority current)"
+    },
+    {
+      "check": "golden MCA reference instances regression (or approved)",
+      "ok": false,
+      "detail": "none supplied — add golden-<name>.xml (MCA-validated Ind AS instance) or approve GOLDEN-INSTANCES-MISSING"
+    },
+    {
+      "check": "XSD / XBRL 2.1 / Dimensions validation (Arelle, offline)",
+      "ok": true,
+      "detail": "Arelle 2.46.0: generated example (with formula linkbase) PASS"
+    },
+    {
+      "check": "production build embeds the compiled authority (no stale data)",
+      "ok": true,
+      "detail": "embedded authority sha256 bda1d48d074c1a15 == compiled bda1d48d074c1a15; indas-xbrl.html identical to index.html"
+    },
+    {
+      "check": "browser UI regression (headless Chromium)",
+      "ok": true,
+      "detail": "49/49 UI checks passed"
+    }
+  ],
+  "released": false
+}
