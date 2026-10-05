@@ -1,0 +1,31 @@
+<title>INDAS XBRL Tool v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;600&display=swap">
+<style>/*STYLES*/</style>
+<a class="skip" href="#main">Skip to the sheet</a>
+<div class="app">
+  <div class="bar">
+    <button class="btn small navtoggle" id="navtoggle" type="button">Sheets</button>
+    <div class="brand">Ind AS XBRL Studio<small>MCA · IND AS TAXONOMY 2017</small></div>
+    <div class="who" id="bar-who"></div>
+    <div class="status" id="bar-status"></div>
+    <div class="spacer"></div>
+    <div class="actions">
+      <button class="btn" type="button" data-act="new-filing">New filing</button>
+      <button class="btn" type="button" data-act="import-xml">Import XML</button>
+      <button class="btn" type="button" data-act="open-project">Open project</button>
+      <button class="btn" type="button" data-act="save-project" title="Download a project file. Changes are also saved in this browser automatically (Ctrl+S saves now).">Save project</button>
+      <button class="btn" type="button" data-act="validate" title="Validate the entire filing (internal gate)">Validate</button>
+      <button class="btn primary" type="button" data-go="xml">Generate XML</button>
+    </div>
+    <input type="file" id="file-xml" class="hidden-file" accept=".xml,application/xml,text/xml">
+    <input type="file" id="file-json" class="hidden-file" accept=".json,application/json">
+  </div>
+  <div class="body">
+    <nav class="nav" id="nav" aria-label="Statements and notes"></nav>
+    <main class="main" id="main" tabindex="-1"></main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script type="application/json" id="mca-authority">/*AUTHORITY*/</script>
+<script>/*APP*/</script>
