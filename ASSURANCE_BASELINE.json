@@ -1,0 +1,77 @@
+{
+ "note": "Assurance harness ceilings (v1.2, measured 2026-10-09). v1.1 recorded the counts of the live v1 code; the v12 rules of v1.2 bring every count to 0 except 'made' (mistakes the sweep could make) and 'locked' (read-only cells, which may change with the rules). assurance.test.mjs fails if any count grows (a regression) and, since v1.2, requires the targets (0) strictly. 'notTypable' counts imported zeros the tool keeps under a Yes/No 'No' answer (GE: its OCI zeros, accepted by MCA) \u2014 they cannot be typed on screen by design and are excluded from the re-key counts. The golden XML files themselves are kept out of the repository.",
+ "instances": {
+  "golden-ge-power-boilers-2024-25.xml": {
+   "rekey": {
+    "rank": {
+     "differing": 0,
+     "extra": 0,
+     "noCell": 0,
+     "errors": 0
+    },
+    "reverse": {
+     "differing": 0,
+     "extra": 0,
+     "noCell": 0,
+     "errors": 0
+    },
+    "random": {
+     "differing": 0,
+     "extra": 0,
+     "noCell": 0,
+     "errors": 0
+    },
+    "notTypable": 10
+   },
+   "mistakes": {
+    "n": 60,
+    "seed": 11,
+    "made": 44,
+    "unreachable": 0,
+    "notRestored": 0,
+    "restoreRefused": 0
+   },
+   "lockedCells": {
+    "locked": 194,
+    "wrong": 0,
+    "lockedEmpty": 0
+   }
+  },
+  "golden-icom-analytics-2022-23.xml": {
+   "rekey": {
+    "rank": {
+     "differing": 0,
+     "extra": 0,
+     "noCell": 0,
+     "errors": 0
+    },
+    "reverse": {
+     "differing": 0,
+     "extra": 0,
+     "noCell": 0,
+     "errors": 0
+    },
+    "random": {
+     "differing": 0,
+     "extra": 0,
+     "noCell": 0,
+     "errors": 0
+    },
+    "notTypable": 0
+   },
+   "mistakes": {
+    "n": 60,
+    "seed": 11,
+    "made": 42,
+    "unreachable": 0,
+    "notRestored": 0,
+    "restoreRefused": 0
+   },
+   "lockedCells": {
+    "locked": 913,
+    "wrong": 0,
+    "lockedEmpty": 0
+   }
+  }
+ }
+}

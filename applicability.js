@@ -5,7 +5,9 @@
 // XML gate enforce it independently.
 import { evalPred } from './expr.js';
 import { reportingYear } from './periods.js';
-import { tablesForFact } from './dimensions.js';
+import { tablesForFact, nondimAllowed } from './dimensions.js';
+import { nondimRowConcepts, totalColumnAllowed } from './views.js';
+import { statementNoteLinks } from './derived.js';
 import * as Dec from './decimal.js';
 
 
@@ -24,6 +26,14 @@ export function openingConcepts(A) {
   while (stack.length) { const c = stack.pop(); for (const k of kids.get(c) || []) if (!set.has(k) && A.concept(k)?.periodType === 'instant') { set.add(k); stack.push(k); } }
   OPENING.set(A, set);
   return set;
+}
+
+// the facts a table condition reads
+function conditionFacts(when) {
+  const facts = new Set();
+  const walk = (x) => { if (!x || typeof x !== 'object') return; if (Array.isArray(x)) { x.forEach(walk); return; } if (typeof x.fact === 'string') facts.add(x.fact); for (const v of Object.values(x)) walk(v); };
+  walk(when);
+  return facts;
 }
 
 export class ApplicabilityError extends Error {
@@ -190,12 +200,16 @@ export class Applicability {
     return { emit, excluded };
   }
 
-  // A numeric zero that the imported instance itself reported is a statement line of the filed accounts (e.g. the OCI
-  // totals presented as 0 while the 'OCI presented net of tax' flag is No). It is kept only when the sole reason to hide
-  // it is a Yes/No dependency; table conditions still apply, and zeros typed by the user are never kept this way.
+  // A monetary zero that the imported instance itself reported on a main statement (balance sheet, statement of profit
+  // and loss, cash flow statement: ELR codes 1xxxxx-3xxxxx) is a statement line of the filed accounts (e.g. the OCI
+  // totals presented as 0 while the 'OCI presented net of tax' flag is No — GE Power Boilers 2024-25). It is kept only
+  // when the sole reason to hide it is a Yes/No dependency; table conditions still apply, and zeros typed by the user
+  // are never kept this way. A disclosure under a No answer (e.g. number of subsidiary companies = 0 while 'Whether
+  // company has subsidiary companies' is No) stays not applicable (v1.1: v1 kept every numeric zero).
   sourceZeroStatement(f, reasons) {
-    return f.origin === 'import' && !f.nil && this.A.isNumeric(f.concept) && Dec.eq(Dec.parse(f.value), Dec.ZERO)
-      && reasons.length > 0 && reasons.every((r) => String(r).startsWith('DEP:'));
+    return f.origin === 'import' && !f.nil && this.A.isMonetary(f.concept) && Dec.eq(Dec.parse(f.value), Dec.ZERO)
+      && reasons.length > 0 && reasons.every((r) => String(r).startsWith('DEP:'))
+      && this.A.conceptElrs(f.concept).some((u) => /^[123]/.test(this.A.elr(u)?.code || ''));
   }
 
   // ---- table level
@@ -217,11 +231,20 @@ export class Applicability {
     const env = this.env(filing, scope);
     const met = [];
     const unmet = [];
+    const open = [];
     if (!this._ruleText) this._ruleText = new Map(this.A.rules.rules.map((r) => [r.id, String(r.source?.clause || r.text || '').replace(/\s+/g, ' ').trim()]));
     const why = (id) => { const t = this._ruleText.get(id) || ''; return t ? ` — MCA rule: "${t.length > 180 ? t.slice(0, 180) + '…' : t}"` : ''; };
     for (const c of conds) {
       const v = evalPred(c.when, env);
       if (v === true) met.push(`${c.rule}: condition met${why(c.rule)}`);
+      // v1.2 (C&I v12): a condition on a total that the taxonomy calculates from this table's own line items, or on the
+      // table's own total column, cannot close the table while it holds values — clearing a value would otherwise
+      // switch the table off and it could never be entered again
+      else if (this.circular(tableId, c.when) && this.tableHasOwnData(filing, t, scope)) met.push(`${c.rule}: condition depends on this table's own values, which are entered`);
+      // v1.2 (C&I v13): the condition reads only statement figures taken from this table (derived.js statementNoteLinks):
+      // while they are not determined yet, or derived from it (calculated, not entered), the table is open so that they
+      // can be derived from it (not mandatory; a figure entered as 0 closes it)
+      else if (this.derivedFromTable(tableId, c.when) && (v === null || this.conditionFactsDerived(filing, c.when, scope))) open.push(`${c.rule}: the statement figure is taken from this table — enter the table to derive it`);
       else unmet.push(`${c.rule}: ${v === null ? 'condition not determinable (fact not entered)' : 'condition not met'}${why(c.rule)}`);
     }
     if (bonds) {
@@ -229,7 +252,39 @@ export class Applicability {
       (has ? met : unmet).push(`${bonds.id}: ${has ? 'Bonds/Debentures borrowings reported' : 'no BondsMember/DebenturesMember borrowings reported'}`);
     }
     if (met.length) return { applicable: true, mandatory: true, conditional: true, reasons: met };
+    if (open.length) return { applicable: true, mandatory: false, conditional: true, reasons: open };
     return { applicable: false, conditional: true, reasons: unmet };
+  }
+
+  // every figure the condition reads is a statement figure taken from this table (statementNoteLinks)
+  derivedFromTable(tableId, when) {
+    const facts = conditionFacts(when);
+    const links = statementNoteLinks(this.A);
+    return facts.size > 0 && [...facts].every((q) => links.get(q)?.tableId === tableId);
+  }
+  // a figure the condition reads is empty or was calculated by the tool from this table (not entered or imported)
+  conditionFactsDerived(filing, when, scope) {
+    return [...conditionFacts(when)].some((q) => { const x = filing.get(q, filing.period(q, scope), []); return !x || x.nil || x.origin === 'calculated'; });
+  }
+  // the condition reads a total that is a calculation parent of one of the table's line items, or one of the table's
+  // own total-column cells
+  circular(tableId, when) {
+    const m = (this._circ ||= new Map());
+    const k = tableId + JSON.stringify(when);
+    if (m.has(k)) return m.get(k);
+    const facts = conditionFacts(when);
+    const items = new Set(this.A.table(tableId).lineItems);
+    let r = false;
+    for (const arcs of Object.values(this.A.json.calculation || {})) for (const a of arcs) if (facts.has(a.from) && items.has(a.to)) r = true;
+    if (totalColumnAllowed(this.A, tableId) && [...facts].some((q) => items.has(q) && nondimAllowed(this.A, q))) r = true;
+    m.set(k, r);
+    return r;
+  }
+  tableHasOwnData(filing, t, scope) {
+    const items = new Set(t.lineItems), axes = new Set(t.axes.map((a) => a.axis));
+    // values of the table itself: member columns, or the total column of elements that are not a statement row
+    const rows = nondimRowConcepts(this.A);
+    return filing.all().some((f) => items.has(f.concept) && !f.nil && f.dims.every((d) => axes.has(d.axis)) && reportingYear(filing.meta.periods, f.period) === scope && (f.dims.length > 0 || !rows.has(f.concept)));
   }
 
   membersHaveData(filing, scope, tableIds, axis, members) {
